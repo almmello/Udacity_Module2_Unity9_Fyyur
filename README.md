@@ -1,6 +1,17 @@
 Fyyur
 -----
 
+## My Release
+
+This repository is my version of the Fyyur app.
+I recorded my development through commits so that you can follow along.
+
+## Requirements Adjustments
+
+It was necessari to set Jinja2 and Werkzeug as following
+Jinja2==3.0.0
+Werkzeug==2.0.3
+
 ## Introduction
 
 Fyyur is a musical venue and artist booking site that facilitates the discovery and bookings of shows between local performing artists and venues. This site lets you list new artists and venues, discover them, and list shows with artists as a venue owner.
