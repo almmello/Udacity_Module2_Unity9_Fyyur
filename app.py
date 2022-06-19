@@ -1,24 +1,28 @@
 #----------------------------------------------------------------------------#
 # Imports
 #----------------------------------------------------------------------------#
-
-import json
 import dateutil.parser
 import babel
-from flask import Flask, render_template, request, Response, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
-from flask_wtf import Form
 from forms import *
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
 
 app = Flask(__name__)
+
+#Import the Config class
+from config import Config
+
 moment = Moment(app)
-app.config.from_object('config')
+
+#Changed to the class Config
+app.config.from_object(Config)
+
 db = SQLAlchemy(app)
 
 # TODO: connect to a local postgresql database
