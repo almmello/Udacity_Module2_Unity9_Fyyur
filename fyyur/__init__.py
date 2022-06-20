@@ -23,11 +23,20 @@ db = SQLAlchemy(app)
 
 # TODO: connect to a local postgresql database
 
-#Import Routes
-from fyyur import routes
+#Import Routes as Blueprints
+from fyyur.artists.routes import artists_bp
+from fyyur.main.routes import main_bp
+from fyyur.shows.routes import shows_bp
+from fyyur.venues.routes import venues_bp
+
+app.register_blueprint(artists_bp)
+app.register_blueprint(main_bp)
+app.register_blueprint(shows_bp)
+app.register_blueprint(venues_bp)
+
 
 #Import Filters
-from fyyur import filters
+from fyyur.main import filters
 
 
 
