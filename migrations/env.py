@@ -7,8 +7,10 @@ from flask import current_app
 
 from alembic import context
 
+#This was added to import models
 from fyyur.artists.models import Artist
 from fyyur.venues.models import Venue
+from fyyur.shows.models import Show
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

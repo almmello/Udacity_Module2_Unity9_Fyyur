@@ -20,5 +20,13 @@ class Venue(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
 
-    # TODO: implement any missing fields, as a database migration using Flask-Migrate
+    # OK: implement any missing fields, as a database migration using Flask-Migrate
+    # All missing fields added
+    genres = db.Column('genres', db.ARRAY(db.String()), nullable=False)
+    website = db.Column(db.String(250))
+    seeking_talent = db.Column(db.Boolean, default=True)
+    seeking_description = db.Column(db.String(250))
+    shows = db.relationship('Show', backref='venue', lazy=True)
 
+    def __repr__(self):
+        return f'<Class ID: {self.id}, NAME: {self.name}, CITY: {self.city}>'
