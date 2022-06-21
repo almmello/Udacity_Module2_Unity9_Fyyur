@@ -11,5 +11,5 @@ class Config(object):
     # Set SQLALCHEMY Track Notifications
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
-    # TODO IMPLEMENT DATABASE URL
-    SQLALCHEMY_DATABASE_URI = '<Put your local database url>'
+    # OK IMPLEMENT DATABASE URL
+    SQLALCHEMY_DATABASE_URI = 'postgressql://postgres@localhost:4432/fyyurdb'

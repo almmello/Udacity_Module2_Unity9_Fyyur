@@ -4,6 +4,8 @@
 from flask import Flask
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
+# Ading Flask-Migrate
+from flask_migrate import Migrate
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -20,8 +22,11 @@ moment = Moment(app)
 app.config.from_object(Config)
 
 db = SQLAlchemy(app)
+#Adding Migrate
+migrate = Migrate(app, db)
 
-# TODO: connect to a local postgresql database
+# OK: connect to a local postgresql database
+app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
 
 #Import Routes as Blueprints
 from fyyur.artists.routes import artists_bp
