@@ -12,4 +12,4 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # OK IMPLEMENT DATABASE URL
-    SQLALCHEMY_DATABASE_URI = 'postgressql://postgres@localhost:4432/fyyurdb'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres@localhost:5432/fyyurdb'
