@@ -105,7 +105,10 @@ class ArtistForm(Form):
         ]
      )
     facebook_link = StringField(
-        # TODO implement enum restriction
+        # OK implement enum restriction
+        # It is not necessary to implement Enom, as on https://knowledge.udacity.com/questions/800921
+        # "the forms are already implementing a list that restricts genres."
+        # Facebook links are also validated using the URL validator.
         'facebook_link', validators=[URL()]
      )
 

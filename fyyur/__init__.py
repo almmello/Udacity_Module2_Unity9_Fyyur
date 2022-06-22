@@ -7,6 +7,10 @@ from flask_sqlalchemy import SQLAlchemy
 # Ading Flask-Migrate
 from flask_migrate import Migrate
 
+import collections
+import collections.abc
+collections.Callable = collections.abc.Callable
+
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
