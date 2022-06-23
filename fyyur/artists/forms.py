@@ -3,7 +3,7 @@
 #----------------------------------------------------------------------------#
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, BooleanField
-from wtforms.validators import DataRequired, URL
+from wtforms.validators import DataRequired, URL, Length
 
 #----------------------------------------------------------------------------#
 # Forms.
@@ -11,12 +11,15 @@ from wtforms.validators import DataRequired, URL
 
 class ArtistForm(Form):
     name = StringField(
-        'name', validators=[DataRequired()]
+        # Added Lenght Validation
+        'name', validators=[DataRequired(), Length(max=110, message=('Maximum Name size is 110 characters!'))]
     )
     city = StringField(
-        'city', validators=[DataRequired()]
+        # Added Lenght Validation
+        'city', validators=[DataRequired(), Length(max=110, message=('Maximum City size is 110 characters!'))]
     )
     state = SelectField(
+        # Added Lenght Validation
         'state', validators=[DataRequired()],
         choices=[
             ('AL', 'AL'),
@@ -74,10 +77,12 @@ class ArtistForm(Form):
     )
     phone = StringField(
         # OK implement validation logic for state
-        'phone', validators=[DataRequired()]
+        # Added Lenght Validation
+        'phone', validators=[DataRequired(), Length(max=20, message=('Maximum Phone size is 20 characters!'))]
     )
     image_link = StringField(
-        'image_link'
+        # Added Lenght Validation
+        'image_link', validators=[DataRequired(), Length(max=490, message=('Maximum Image Link size is 490 characters!'))]
     )
     genres = SelectMultipleField(
         'genres', validators=[DataRequired()],
@@ -108,16 +113,19 @@ class ArtistForm(Form):
         # It is not necessary to implement Enom, as on https://knowledge.udacity.com/questions/800921
         # "the forms are already implementing a list that restricts genres."
         # Facebook links are also validated using the URL validator.
-        'facebook_link', validators=[URL()]
+        # Added Lenght Validation
+        'facebook_link', validators=[URL(), Length(max=110, message=('Maximum Facebook Link size is 110 characters!'))]
      )
 
     website_link = StringField(
-        'website_link'
+        # Added Lenght Validation
+        'website_link', validators=[DataRequired(), Length(max=110, message=('Maximum Website Link size is 110 characters!'))]
      )
 
     seeking_venue = BooleanField( 'seeking_venue' )
 
     seeking_description = StringField(
-            'seeking_description'
+        # Added Lenght Validation
+        'seeking_description', validators=[DataRequired(), Length(max=490, message=('Maximum Seeking Description size is 490 characters!'))]
      )
 

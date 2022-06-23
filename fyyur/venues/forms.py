@@ -4,7 +4,7 @@
 from datetime import datetime
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms.validators import DataRequired, AnyOf, URL, Length
 
 #----------------------------------------------------------------------------#
 # Forms.
@@ -12,10 +12,12 @@ from wtforms.validators import DataRequired, AnyOf, URL
 
 class VenueForm(Form):
     name = StringField(
-        'name', validators=[DataRequired()]
+        # Added Lenght Validation
+        'name', validators=[DataRequired(), Length(max=110, message=('Maximum Name Link size is 110 characters!'))]
     )
     city = StringField(
-        'city', validators=[DataRequired()]
+        # Added Lenght Validation
+        'city', validators=[DataRequired(), Length(max=110, message=('Maximum City size is 110 characters!'))]
     )
     state = SelectField(
         'state', validators=[DataRequired()],
@@ -74,13 +76,16 @@ class VenueForm(Form):
         ]
     )
     address = StringField(
-        'address', validators=[DataRequired()]
+        # Added Lenght Validation
+        'address', validators=[DataRequired(), Length(max=110, message=('Maximum Address size is 110 characters!'))]
     )
     phone = StringField(
-        'phone'
+        # Added Lenght Validation
+        'phone', validators=[Length(max=20, message=('Maximum Phone size is 20 characters!'))]
     )
     image_link = StringField(
-        'image_link'
+        # Added Lenght Validation
+        'image_link', validators=[Length(max=490, message=('Maximum Image Link size is 490 characters!'))]
     )
     genres = SelectMultipleField(
         # OK implement enum restriction
@@ -111,16 +116,19 @@ class VenueForm(Form):
         ]
     )
     facebook_link = StringField(
-        'facebook_link', validators=[URL()]
+        # Added Lenght Validation
+        'facebook_link', validators=[URL(), Length(max=110, message=('Maximum Facebook Link size is 110 characters!'))]
     )
     website_link = StringField(
-        'website_link'
+        # Added Lenght Validation
+        'website_link', validators=[Length(max=240, message=('Maximum Website Link size is 240 characters!'))]
     )
 
     seeking_talent = BooleanField( 'seeking_talent' )
 
     seeking_description = StringField(
-        'seeking_description'
+        # Added Lenght Validation
+        'seeking_description', validators=[Length(max=240, message=('Maximum Seeking Description size is 240 characters!'))]
     )
 
 
