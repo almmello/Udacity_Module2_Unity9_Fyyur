@@ -1,10 +1,9 @@
 #----------------------------------------------------------------------------#
 # Imports
 #----------------------------------------------------------------------------#
-from datetime import datetime
 from flask_wtf import Form
-from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms import StringField, SelectField, SelectMultipleField, BooleanField
+from wtforms.validators import DataRequired, URL
 
 #----------------------------------------------------------------------------#
 # Forms.
@@ -74,8 +73,8 @@ class ArtistForm(Form):
         ]
     )
     phone = StringField(
-        # TODO implement validation logic for state
-        'phone'
+        # OK implement validation logic for state
+        'phone', validators=[DataRequired()]
     )
     image_link = StringField(
         'image_link'
