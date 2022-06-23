@@ -2,7 +2,7 @@
 # Imports
 #----------------------------------------------------------------------------#
 from flask import render_template, request, flash, redirect, url_for, Blueprint
-from datetime import datetime
+from sqlalchemy import or_
 from fyyur.main.filters import format_datetime
 from fyyur import db
 
@@ -14,6 +14,8 @@ from fyyur.shows.forms import *
 
 #This was added to import models from shows
 from fyyur.shows.models import Show
+from fyyur.artists.models import Artist
+from fyyur.venues.models import Venue
 
 #----------------------------------------------------------------------------#
 # Controllers.
@@ -76,3 +78,22 @@ def create_show_submission():
   
   return render_template('pages/home.html')
 
+@shows_bp.route('/shows/search', methods=['POST'])
+def search_shows(): 
+# OK: implement search on shows with partial string search. Ensure it is case-insensitive.
+# seach for "a" will return shows with artists or venues containig the letter "a"
+
+
+  # Get the search term from the form using GET
+  search_term = request.form.get('search_term', '')
+
+  # Quering the table Shows join Artist join Venue using a filter with the search_term between wilcard (%) and ilike to be case-sensitive
+  shows_query = db.session.query(Show.id, Show.artist_id, Show.venue_id, Show.start_time, Artist.name, Artist.image_link, Venue.name).join(Artist).join(Venue).filter(or_(Artist.name.ilike(f'%{search_term}%'), Venue.name.ilike(f'%{search_term}%')))
+
+  # Finally we create the response by using the function count on the query results and sending the result as a dictionary
+  response = {
+    'count': shows_query.count(),
+    'data': shows_query.all()
+  }
+
+  return render_template('pages/search_shows.html', results=response, search_term=request.form.get('search_term', ''))
