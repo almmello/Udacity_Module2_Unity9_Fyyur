@@ -11,9 +11,6 @@ import collections
 import collections.abc
 collections.Callable = collections.abc.Callable
 
-#----------------------------------------------------------------------------#
-# App Config.
-#----------------------------------------------------------------------------#
 
 app = Flask(__name__)
 
@@ -29,8 +26,7 @@ db = SQLAlchemy(app)
 #Adding Migrate
 migrate = Migrate(app, db)
 
-# OK: connect to a local postgresql database
-app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
+
 
 #Import Routes as Blueprints
 from fyyur.artists.routes import artists_bp

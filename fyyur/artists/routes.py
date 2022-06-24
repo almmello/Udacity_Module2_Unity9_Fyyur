@@ -1,7 +1,13 @@
 #----------------------------------------------------------------------------#
 # Imports
 #----------------------------------------------------------------------------#
-from flask import render_template, request, flash, redirect, url_for, Blueprint
+from flask import (
+                   render_template,
+                   flash,
+                   redirect,
+                   url_for,
+                   Blueprint
+                  )
 from fyyur.main.filters import format_datetime
 from fyyur import db
 from datetime import datetime

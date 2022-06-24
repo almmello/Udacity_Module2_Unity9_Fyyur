@@ -1,7 +1,11 @@
 #----------------------------------------------------------------------------#
 # Imports
 #----------------------------------------------------------------------------#
-from flask import render_template, request, flash, redirect, url_for, Blueprint
+from flask import (
+                   render_template,
+                   flash,
+                   Blueprint
+                  )
 from sqlalchemy import or_
 from fyyur.main.filters import format_datetime
 from fyyur import db

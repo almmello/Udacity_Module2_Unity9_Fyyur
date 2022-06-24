@@ -1,3 +1,7 @@
+#----------------------------------------------------------------------------#
+# App Config.
+#----------------------------------------------------------------------------#
+
 import os
 
 class Config(object):
@@ -13,3 +17,5 @@ class Config(object):
     
     # OK IMPLEMENT DATABASE URL
     SQLALCHEMY_DATABASE_URI = 'postgresql://postgres@localhost:5432/fyyurdb'
+
+
