@@ -95,7 +95,31 @@ Run the App:
 export FLASK_APP=run.py	 
 export FLASK_ENV=development	 
 python3 -m flask run 	 
-```  
+```
+
+## Flask Migrations
+
+To initiate the database, use the following init command:
+```
+export FLASK_APP=run.py
+flask db init
+```
+
+To prepare the migration script:
+```
+export FLASK_APP=run.py
+flask db migrate
+```
+
+To execute the migration:
+```
+flask db upgrade
+```
+
+To rollback the migration:	 
+```
+flask db downgrade
+```
 
 ## Main Files: Project Structure
 
