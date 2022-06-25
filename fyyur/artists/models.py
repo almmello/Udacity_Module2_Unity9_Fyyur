@@ -26,7 +26,9 @@ class Artist(db.Model):
     website = db.Column(db.String(120))
     seeking_venue = db.Column(db.Boolean, default=True)
     seeking_description = db.Column(db.String(500))
-    shows = db.relationship('Show', backref='artist', lazy=True)
+    
+    # Changed relationship to lazy='joined', cascade="all, delete"
+    shows = db.relationship('Show', backref='artist', lazy='joined', cascade="all, delete")
 
     def __repr__(self):
         return f'<Class ID: {self.id}, NAME: {self.name}, CITY: {self.city}>'

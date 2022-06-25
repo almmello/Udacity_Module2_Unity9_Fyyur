@@ -4,11 +4,13 @@
 from flask import (
                    render_template,
                    flash,
-                   Blueprint
+                   Blueprint,
+                   request
                   )
 from sqlalchemy import or_
 from fyyur.main.filters import format_datetime
 from fyyur import db
+import sys
 
 #create the blueprint
 shows_bp = Blueprint('shows_bp', __name__)
@@ -54,21 +56,32 @@ def create_shows():
   form = ShowForm()
   return render_template('forms/new_show.html', form=form)
 
+
 @shows_bp.route('/shows/create', methods=['POST'])
 def create_show_submission():
   # called to create new shows in the db, upon submitting new show listing form
   # OK: insert form data as a new Show record in the db, instead
 
-  # on successful db insert, flash success
-  try:
-    show = Show(
-                start_time=request.form['start_time'],
-                artist_id=request.form['artist_id'],
-                venue_id=request.form['venue_id'],
-                )
+  # first we create a form instance with the data from the submited form
+  form = ShowForm(request.form)
 
+  # Using the try-except-finally pattern.
+  try:
+
+    # then we create a show object
+    show = Show()
+
+    # To avoid having to deal with each field manually,
+    # we use the form.populate_obj() method:
+    form.populate_obj(show)
+
+    # now, we add the artist object into database
     db.session.add(show)
+
+    # to persist the data on the database, we than commit the db session
     db.session.commit()
+
+    # then we flash success
     flash('Show was successfully listed!')
 
   # OK: on unsuccessful db insert, flash an error instead.
@@ -77,10 +90,15 @@ def create_show_submission():
   except:
     db.session.rollback()
     flash('An error occurred. Show could not be listed.')
+    # print stack trace for an exception
+    print(sys.exc_info())
+
   finally:
+    # last thing we do, close the session and return to the home page
     db.session.close()
-  
+
   return render_template('pages/home.html')
+
 
 @shows_bp.route('/shows/search', methods=['POST'])
 def search_shows(): 

@@ -2,7 +2,7 @@
 # Imports
 #----------------------------------------------------------------------------#
 from fyyur import db
-
+from datetime import datetime
 
 #----------------------------------------------------------------------------#
 # Models.
@@ -26,7 +26,9 @@ class Venue(db.Model):
     website = db.Column(db.String(250))
     seeking_talent = db.Column(db.Boolean, default=True)
     seeking_description = db.Column(db.String(250))
-    shows = db.relationship('Show', backref='venue', lazy=True)
+
+    # Changed relationship to lazy='joined', cascade="all, delete"
+    shows = db.relationship('Show', backref='venue', lazy='joined', cascade="all, delete")
 
     def __repr__(self):
         return f'<Class ID: {self.id}, NAME: {self.name}, CITY: {self.city}>'

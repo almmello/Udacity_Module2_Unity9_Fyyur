@@ -5,6 +5,7 @@ from flask import (
                    render_template,
                    flash,
                    redirect,
+                   request,
                    url_for,
                    Blueprint
                   )
@@ -79,46 +80,33 @@ def venues():
 def show_venue(venue_id):
   # shows the venue page with the given venue_id
   # OK: replace with real venue data from the venues table, using venue_id
-  # Create variables venues (query with <id>), shows (query with venue <id>),
-  # past shows and upcaming shows.
+  # Create variables venues (query with <id>), past shows and upcaming shows.
   venue = Venue.query.get(venue_id)
-  shows = Show.query.filter_by(venue_id=venue_id).all()
   past_shows = []
   upcoming_shows = []
 
-  # loop through shows to set the past and upcoming shows lists
-  #create variables data (will be passed to page venues/<int>)
-  for show in shows:
-    data = {
+  # loop through venues.shows to set the past and upcoming shows lists
+  #create variables data_temp (will be passed to past and upcoming shows)
+  for show in venue.shows:
+    data_temp = {
       "artist_id": show.artist_id,
       "artist_name": show.artist.name,
       "artist_image_link": show.artist.image_link,
       "start_time": format_datetime(str(show.start_time))
     }
     if show.start_time < datetime.now():
-      past_shows.append(data)
+      past_shows.append(data_temp)
     else:
-      upcoming_shows.append(data)
+      upcoming_shows.append(data_temp)
 
-  # add values to data dictionary
-  data={
-    "id": venue.id,
-    "name": venue.name,
-    "genres": venue.genres,
-    "address": venue.address,
-    "city": venue.city,
-    "state": venue.state,
-    "phone": venue.phone,
-    "website": venue.website,
-    "facebook_link": venue.facebook_link,
-    "seeking_talent": venue.seeking_talent,
-    "seeking_description":venue.seeking_description,
-    "image_link": venue.image_link,
-    "past_shows": past_shows,
-    "upcoming_shows": upcoming_shows,
-    "past_shows_count": len(past_shows),
-    "upcoming_shows_count": len(upcoming_shows)
-  }
+  # add venue query result to dictionary data
+  data=vars(venue)
+
+  # add past and upcoming shows and past and upcoming count to data
+  data['past_shows'] = past_shows
+  data['upcoming_shows'] = upcoming_shows
+  data['past_shows_count'] = len(past_shows)
+  data['upcoming_shows_count'] = len(upcoming_shows)
 
   return render_template('pages/show_venue.html', venue=data)
 
@@ -157,25 +145,18 @@ def create_venue_submission():
 # OK: insert form data as a new Venue record in the db, instead
 # OK: modify data to be the data object returned from db insertion
 
+    # first we create a form instance with the data from the submited form
+  form = VenueForm(request.form)
+
   # Using the try-except-finally pattern.
   try:
-    # first we create a form instance with the data from the submited form
-    form = VenueForm()
 
-    # then we create a venue object with data from the form matching the table Venue
-    venue = Venue(
-                  name=form.name.data,
-                  city=form.city.data,
-                  state=form.state.data,
-                  address=form.address.data,
-                  phone=form.phone.data,
-                  image_link=form.image_link.data,
-                  facebook_link=form.facebook_link.data,
-                  genres=form.genres.data,
-                  website=form.website_link.data,
-                  seeking_talent=form.seeking_talent.data,
-                  seeking_description=form.seeking_description.data
-                  )
+    # then we create a venue object
+    venue = Venue()
+
+    # To avoid having to deal with each field manually,
+    # we use the form.populate_obj() method:
+    form.populate_obj(venue)
 
     # now, we add the venue object into database
     db.session.add(venue)

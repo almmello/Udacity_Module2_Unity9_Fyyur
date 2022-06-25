@@ -5,6 +5,7 @@ from flask import (
                    render_template,
                    flash,
                    redirect,
+                   request,
                    url_for,
                    Blueprint
                   )
@@ -47,47 +48,36 @@ def artists():
 def show_artist(artist_id):
   # shows the artist page with the given artist_id
   # OK: replace with real artist data from the artist table, using artist_id
-  # Create variables artists (query with <id>), shows (query with artist <id>),
-  # past shows and upcaming shows.
+  # Create variables artists (query with <id>), past shows and upcaming shows.
   artist = Artist.query.get(artist_id)
-  shows = Show.query.filter_by(artist_id=artist_id).all()
   past_shows = []
   upcoming_shows = []
 
-  # loop through shows to set the past and upcoming shows lists
-  #create variables data (will be passed to page venues/<int>)
-  for show in shows:
-    data = {
-      'venue_id': show.venue_id,
-      'venue_name': show.venue.name,
-      'venue_image_link': show.venue.image_link,
-      'start_time': format_datetime(str(show.start_time))
+  # loop through venues.shows to set the past and upcoming shows lists
+  #create variables data_temp (will be passed to past and upcoming shows)
+  for show in artist.shows:
+    data_temp = {
+      "venue_id": show.venue_id,
+      "venue_name": show.venue.name,
+      "venue_image_link": show.venue.image_link,
+      "start_time": format_datetime(str(show.start_time))
     }
     if show.start_time < datetime.now():
-      past_shows.append(data)
+      past_shows.append(data_temp)
     else:
-      upcoming_shows.append(data)
+      upcoming_shows.append(data_temp)
 
-  # add values to data dictionary
-  data = {
-    'id': artist.id,
-    'name': artist.name,
-    'genres': artist.genres,
-    'city': artist.city,
-    'state': artist.state,
-    'phone': artist.phone,
-    'website': artist.website,
-    'facebook_link': artist.facebook_link,
-    'seeking_venue': artist.seeking_venue,
-    'seeking_description':artist.seeking_description,
-    'image_link': artist.image_link,
-    'past_shows': past_shows,
-    'upcoming_shows': upcoming_shows,
-    'past_shows_count': len(past_shows),
-    'upcoming_shows_count': len(upcoming_shows)
-  }
+  # add venue query result to dictionary data
+  data=vars(artist)
+
+  # add past and upcoming shows and past and upcoming count to data
+  data['past_shows'] = past_shows
+  data['upcoming_shows'] = upcoming_shows
+  data['past_shows_count'] = len(past_shows)
+  data['upcoming_shows_count'] = len(upcoming_shows)
 
   return render_template('pages/show_artist.html', artist=data)
+
 
 #  Create Artist
 #  ----------------------------------------------------------------
@@ -104,24 +94,18 @@ def create_artist_submission():
   # OK: insert form data as a new Artist record in the db, instead
   # OK: modify data to be the data object returned from db insertion
 
+  # first we create a form instance with the data from the submited form
+  form = ArtistForm(request.form)
+
   # Using the try-except-finally pattern.
   try:
-    # first we create a form instance with the data from the submited form
-    form = ArtistForm()
 
-    # then we create an artist object with data from the form matching the table Artist
-    artist = Artist(
-                     name=form.name.data,
-                     city=form.city.data,
-                     state=form.state.data,
-                     phone=form.phone.data,
-                     genres=form.genres.data,
-                     image_link=form.image_link.data,
-                     facebook_link=form.facebook_link.data,
-                     website=form.website_link.data,
-                     seeking_venue=form.seeking_venue.data,
-                     seeking_description=form.seeking_description.data
-                     )
+    # then we create an artist object
+    artist = Artist()
+
+    # To avoid having to deal with each field manually,
+    # we use the form.populate_obj() method:
+    form.populate_obj(artist)
 
     # now, we add the artist object into database
     db.session.add(artist)
